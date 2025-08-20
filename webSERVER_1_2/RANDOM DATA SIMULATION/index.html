@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        #data {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sensor Data</h1>
+    <button id="fetchData">Fetch Sensor Data</button>
+    <div id="data"></div>
+
+    <script>
+        document.getElementById('fetchData').addEventListener('click', function() {
+            // Fetch data from server
+            setInterval(()=>{
+
+            
+            fetch('/data')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('data').innerText = data;
+                })
+                .catch(error => {
+                    document.getElementById('data').innerText = 'Error fetching data';
+                    console.error('Error:', error);
+                });
+            },1000)
+        });
+    </script>
+</body>
+</html>

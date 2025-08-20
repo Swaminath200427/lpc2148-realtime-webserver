@@ -1,0 +1,915 @@
+"C:\Users\admin\AppData\Local\Programs\Python\Python311-32\python.exe"
+
+// app.py most latest
+
+import zlib
+from flask import Flask, render_template, jsonify
+import mysql.connector
+import requests   # type: ignore
+import json
+import ctypes
+from ctypes import c_void_p, WINFUNCTYPE, CFUNCTYPE
+from datetime import datetime
+import threading
+import time
+import os
+import sys
+import platform
+import struct
+#from ctypes import cdll, c_void_p
+#from ctypes import WINFUNCTYPE, c_void_p
+print(f"Python version: {sys.version}")
+print(f"Architecture: {platform.architecture()}")
+print(f"Pointer size: {struct.calcsize('P') * 8} bits")
+
+app = Flask(__name__)
+lib = ctypes.CDLL("F:\\PROJECTS & RESEARCH\\MP_PROJECT\\webSERVER_1_2\\FRONTEND\\libmylibrary.dll")
+
+def load_library():
+    lib_name = 'libmylibrary.dll' if sys.platform.startswith('win') else 'libmylibrary.so'
+    lib_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), lib_name)
+    
+    print(f"Attempting to load library from: {lib_path}")
+    print(f"Python Architecture: {platform.architecture()[0]}")  # Add this line
+
+    if not os.path.exists(lib_path):
+        print(f"Error: The library file {lib_path} does not exist.")
+        return None
+    
+    try:
+        # Force using WinDLL for Windows
+        if sys.platform.startswith('win'):
+            lib = ctypes.WinDLL(lib_path)
+        else:
+            lib = ctypes.CDLL(lib_path)
+        # Specify the calling convention (std or cdecl)
+        ENC28J60_init_func = WINFUNCTYPE(None)(("ENC28J60_init", lib))
+
+        # Call the function
+        ENC28J60_init_func()
+        
+        # Define function signatures
+        lib.generate_random.argtypes = [ctypes.c_double, ctypes.c_double]
+        lib.generate_random.restype = ctypes.c_double
+        
+        lib.sensor_data_to_json.argtypes = [ctypes.c_void_p]
+        lib.sensor_data_to_json.restype = ctypes.c_char_p
+        
+        lib.Getdata.argtypes = [ctypes.c_void_p]
+        lib.Getdata.restype = None
+        
+        lib.ENC28J60_init.argtypes = []
+        lib.ENC28J60_init.restype = None
+        # Call the function
+        try:
+            lib.ENC28J60_init()
+        except Exception as e:
+            print(f"Error calling ENC28J60_init: {e}")
+        #lib.set_mac_address.argtypes = [ctypes.POINTER(ctypes.c_ubyte)]
+        #lib.set_mac_address.restype = None
+        # Load the DLL
+
+
+        lib.set_ip_address.argtypes = [ctypes.c_char_p]
+        lib.set_ip_address.restype = None
+        
+        return lib
+    except Exception as e:
+        print(f"Error loading shared library: {e}")
+        print("System details:")
+        print(f"  Operating System: {sys.platform}")
+        print(f"  Python version: {sys.version}")
+        print(f"  Python architecture: {8 * ctypes.sizeof(ctypes.c_voidp)} bit")
+        return None
+
+lib = load_library()
+if lib is None:
+    print("Warning: Failed to load the sensor data library. Some functionality may be limited.")
+else:
+    print("Successfully loaded the sensor data library.")
+    
+    # Initialize the ENC28J60 Ethernet module
+    lib.ENC28J60_init()
+    # Set MAC address
+    #mac_address = (ctypes.c_ubyte * 6)(0x00, 0x1A, 0x2B, 0x3C, 0x4D, 0x5E)
+    #lib.set_mac_address(mac_address)
+    
+    # Set IP address
+    lib.set_ip_address(b"192.168.1.100")
+
+# Configuration
+MONGOOSE_SERVER = "http://192.168.1.100"  # LPC2148 IP address
+POLL_INTERVAL = 2  # seconds between data fetches
+
+# Database configuration
+DB_CONFIG = {
+    "host": "localhost",
+    "port": "3306",
+    "user": "root",
+    "password": "Rishi@2003",
+    "database": "sensor_data_db"
+}
+
+def connect_to_database():
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        if conn.is_connected():
+            return conn
+        return None
+    except mysql.connector.Error as e:
+        print(f"Database connection error: {e}")
+        return None
+
+def get_sensor_data_from_c():
+    if lib is None:
+        return None
+    
+    class SensorData(ctypes.Structure):
+        _field_ = [("temperature", ctypes.c_double),
+                    ("humidity", ctypes.c_double),
+                    ("pressure", ctypes.c_double),
+                    ("light", ctypes.c_double)]
+    
+    sensor_data = SensorData()
+    lib.Getdata(ctypes.byref(sensor_data))
+    
+    json_data = lib.sensor_data_to_json(ctypes.byref(sensor_data))
+    if json_data:
+        return json.loads(json_data.decode('utf-8'))
+    return None
+
+def store_sensor_data(sensor_data):
+    """Store sensor data received from Mongoose server"""
+    conn = connect_to_database()
+    if conn is None:
+        return False
+
+    try:
+        cursor = conn.cursor()
+        query = """INSERT INTO SensorData 
+                  (temperature, humidity, pressure, light, timestamp) 
+                  VALUES (%s, %s, %s, %s, %s)"""
+        
+        values = (
+            sensor_data.get('temperature', 0.0),
+            sensor_data.get('humidity', 0.0),
+            sensor_data.get('pressure', 0.0),
+            sensor_data.get('light', 0.0),
+            time.strftime('%Y-%m-%d %H:%M:%S')
+        )
+        
+        cursor.execute(query, values)
+        conn.commit()
+        return True
+
+    except mysql.connector.Error as e:
+        print(f"Error storing data: {e}")
+        return False
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+def fetch_mongoose_data():
+    """Fetch data from Mongoose server"""
+    try:
+        response = requests.get(f"{MONGOOSE_SERVER}/api/sensor")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Error fetching data: {response.status_code}")
+            return None
+    except requests.RequestException as e:
+        print(f"Request error: {e}")
+        return None
+
+def background_data_collection():
+    """Background thread to continuously fetch and store data"""
+    while True:
+        try:
+            # Fetch data from Mongoose
+            sensor_data = get_sensor_data_from_c()
+            if sensor_data:
+                # Store in database
+                store_sensor_data(sensor_data)
+            
+        except Exception as e:
+            print(f"Background task error: {e}")
+        
+        time.sleep(POLL_INTERVAL)
+
+# Start background data collection
+data_thread = threading.Thread(target=background_data_collection, daemon=True)
+data_thread.start()
+
+@app.route('/')
+def home():
+    conn = connect_to_database()
+    if conn is None:
+        return "Failed to connect to the database."
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT id, temperature, humidity, pressure, light, timestamp 
+            FROM SensorData 
+            ORDER BY timestamp DESC 
+            LIMIT 10
+        ''')
+        rows = cursor.fetchall()
+
+        data = [{
+            'id': row[0],
+            'temperature': row[1],
+            'humidity': row[2],
+            'pressure': row[3],
+            'light': row[4],
+            'timestamp': row[5]
+        } for row in rows]
+
+        # Get real-time data from C library
+        current_data = get_sensor_data_from_c()
+
+        return render_template('index.html', 
+                             historical_data=data,
+                             current_data=current_data)
+
+    except mysql.connector.Error as e:
+        return f"Error fetching data: {e}"
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+@app.route('/api/current')
+def get_current_data():
+    """API endpoint to get current sensor data"""
+    data = get_sensor_data_from_c()
+    if data:
+        return jsonify(data)
+    return jsonify({'error': 'Failed to fetch data'}), 500
+
+@app.route('/api/historical')
+def get_historical_data():
+    """API endpoint to get historical sensor data"""
+    conn = connect_to_database()
+    if conn is None:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT id, temperature, humidity, pressure, light, timestamp 
+            FROM SensorData 
+            ORDER BY timestamp DESC 
+            LIMIT 100
+        ''')
+        rows = cursor.fetchall()
+
+        data = [{
+            'id': row[0],
+            'temperature': row[1],
+            'humidity': row[2],
+            'pressure': row[3],
+            'light': row[4],
+            'timestamp': row[5].isoformat()
+        } for row in rows]
+
+        return jsonify(data)
+
+    except mysql.connector.Error as e:
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+if __name__ == "_main_":
+    app.run(debug=True)
+
+30/10/2024 -app.py
+#28/10/24 - app.py
+
+import os
+import sys
+import platform
+import struct
+import ctypes
+from ctypes import c_void_p, WINFUNCTYPE, CFUNCTYPE
+from flask import Flask, render_template, jsonify
+import mysql.connector
+import requests
+import json
+import threading    
+import time
+
+app = Flask(__name__)
+
+# Print initial information for debugging
+print(f"Python version: {sys.version}")
+print(f"Architecture: {platform.architecture()}")
+print(f"Pointer size: {struct.calcsize('P') * 8} bits")
+
+def load_library():
+    lib_name = 'libmylibrary.dll' if sys.platform.startswith('win') else 'libmylibrary.so'
+    lib_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), lib_name)
+    #lib_path = ctypes.util.find_library(lib_name)
+
+    print(f"Attempting to load library from: {lib_path}")
+    print(f"Python Architecture: {platform.architecture()[0]}")
+
+    if not os.path.exists(lib_path):
+        print(f"Error: The library file {lib_path} does not exist.")
+        return None
+
+    try:
+        # Force using WinDLL for Windows
+        lib = ctypes.WinDLL(lib_path) if sys.platform.startswith('win') else ctypes.CDLL(lib_path)
+        
+        # Define function signatures with appropriate calling conventions
+        lib.ENC28J60_init.argtypes = []
+        lib.ENC28J60_init.restype = None
+
+        lib.generate_random.argtypes = [ctypes.c_double, ctypes.c_double]
+        lib.generate_random.restype = ctypes.c_double
+
+        lib.sensor_data_to_json.argtypes = [ctypes.c_void_p]
+        lib.sensor_data_to_json.restype = ctypes.c_char_p
+        
+        lib.Getdata.argtypes = [ctypes.c_void_p]
+        lib.Getdata.restype = None
+
+        lib.set_ip_address.argtypes = [ctypes.c_char_p]
+        lib.set_ip_address.restype = None
+
+        # Initialize the ENC28J60 Ethernet module
+        print("Initializing ENC28J60...")
+        try:
+            lib.ENC28J60_init()
+        except Exception as e:
+            print(f"Error calling ENC28J60_init: {e}")
+
+        return lib
+    except Exception as e:
+        print(f"Error loading shared library: {e}")
+        print("System details:")
+        print(f"  Operating System: {sys.platform}")
+        print(f"  Python version: {sys.version}")
+        print(f"  Python architecture: {8 * ctypes.sizeof(ctypes.c_voidp)} bit")
+        return None
+
+lib = load_library()
+if lib is None:
+    print("Warning: Failed to load the sensor data library. Some functionality may be limited.")
+else:
+    print("Successfully loaded the sensor data library.")
+    
+    # Set IP address
+    lib.set_ip_address(b"192.168.1.100")
+
+# Configuration
+MONGOOSE_SERVER = "http://192.168.1.100"  # LPC2148 IP address
+POLL_INTERVAL = 2  # seconds between data fetches
+
+# Database configuration
+DB_CONFIG = {
+    "host": "localhost",
+    "port": "3306",
+    "user": "root",
+    "password": "Rishi@2003",
+    "database": "sensor_data_db"
+}
+
+def connect_to_database():
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        if conn.is_connected():
+            return conn
+        return None
+    except mysql.connector.Error as e:
+        print(f"Database connection error: {e}")
+        return None
+
+def get_sensor_data_from_c():
+    if lib is None:
+        return None
+    
+    class SensorData(ctypes.Structure):
+        _fields_ = [("temperature", ctypes.c_double),
+                    ("humidity", ctypes.c_double),
+                    ("pressure", ctypes.c_double),
+                    ("light", ctypes.c_double)]
+    
+    sensor_data = SensorData()
+    lib.Getdata(ctypes.byref(sensor_data))
+    
+    json_data = lib.sensor_data_to_json(ctypes.byref(sensor_data))
+    if json_data:
+        return json.loads(json_data.decode('utf-8'))
+    return None
+
+def store_sensor_data(sensor_data):
+    """Store sensor data received from Mongoose server"""
+    conn = connect_to_database()
+    if conn is None:
+        return False
+
+    try:
+        cursor = conn.cursor()
+        query = """INSERT INTO SensorData 
+                  (temperature, humidity, pressure, light, timestamp) 
+                  VALUES (%s, %s, %s, %s, %s)"""
+        
+        values = (
+            sensor_data.get('temperature', 0.0),
+            sensor_data.get('humidity', 0.0),
+            sensor_data.get('pressure', 0.0),
+            sensor_data.get('light', 0.0),
+            time.strftime('%Y-%m-%d %H:%M:%S')
+        )
+        
+        cursor.execute(query, values)
+        conn.commit()
+        return True
+
+    except mysql.connector.Error as e:
+        print(f"Error storing data: {e}")
+        return False
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+def fetch_mongoose_data():
+    """Fetch data from Mongoose server"""
+    try:
+        response = requests.get(f"{MONGOOSE_SERVER}/api/sensor")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Error fetching data: {response.status_code}")
+            return None
+    except requests.RequestException as e:
+        print(f"Request error: {e}")
+        return None
+
+def background_data_collection():
+    """Background thread to continuously fetch and store data"""
+    while True:
+        try:
+            # Fetch data from Mongoose
+            sensor_data = get_sensor_data_from_c()
+            if sensor_data:
+                # Store in database
+                store_sensor_data(sensor_data)
+            
+        except Exception as e:
+            print(f"Background task error: {e}")
+        
+        time.sleep(POLL_INTERVAL)
+
+# Start background data collection
+data_thread = threading.Thread(target=background_data_collection, daemon=True)
+data_thread.start()
+
+@app.route('/')
+def home():
+    conn = connect_to_database()
+    if conn is None:
+        return "Failed to connect to the database."
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute('''SELECT id, temperature, humidity, pressure, light, timestamp 
+                          FROM SensorData 
+                          ORDER BY timestamp DESC 
+                          LIMIT 10''')
+        rows = cursor.fetchall()
+
+        data = [{
+            'id': row[0],
+            'temperature': row[1],
+            'humidity': row[2],
+            'pressure': row[3],
+            'light': row[4],
+            'timestamp': row[5]
+        } for row in rows]
+
+        # Get real-time data from C library
+        current_data = get_sensor_data_from_c()
+
+        return render_template('index.html', 
+                               historical_data=data,
+                               current_data=current_data)
+
+    except mysql.connector.Error as e:
+        return f"Error fetching data: {e}"
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+@app.route('/api/current')
+def get_current_data():
+    """API endpoint to get current sensor data"""
+    data = get_sensor_data_from_c()
+    if data:
+        return jsonify(data)
+    return jsonify({'error': 'Failed to fetch data'}), 500
+
+@app.route('/api/historical')
+def get_historical_data():
+    """API endpoint to get historical sensor data"""
+    conn = connect_to_database()
+    if conn is None:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute('''SELECT id, temperature, humidity, pressure, light, timestamp 
+                          FROM SensorData 
+                          ORDER BY timestamp DESC 
+                          LIMIT 100''')
+        rows = cursor.fetchall()
+
+        data = [{
+            'id': row[0],
+            'temperature': row[1],
+            'humidity': row[2],
+            'pressure': row[3],
+            'light': row[4],
+            'timestamp': row[5].isoformat()
+        } for row in rows]
+
+        return jsonify(data)
+
+    except mysql.connector.Error as e:
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+30/10/2024 - index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Systems Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        :root {
+            --bg-color: #f3f4f6;
+            --text-color: #2c3e50;
+            --card-bg-color: #ffffff;
+            --sidebar-bg-color: #34495e;
+            --sidebar-hover-bg-color: #1abc9c;
+            --header-bg-color: #ecf0f1;
+            --box-shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --card-bg-color: #34495e;
+            --sidebar-bg-color: #2c3e50;
+            --sidebar-hover-bg-color: #16a085;
+            --header-bg-color: #34495e;
+            --box-shadow-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+            box-shadow: 5px 0 15px var(--box-shadow-color);
+        }
+
+        .sidebar h1 {
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .sidebar a {
+            color: #bdc3c7;
+            text-decoration: none;
+            margin: 15px 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--sidebar-hover-bg-color);
+            color: #ffffff;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .header .logout-button {
+            background-color: #e74c3c;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .header .logout-button:hover {
+            background-color: #c0392b;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px;
+            background-color: var(--header-bg-color);
+            border-radius: 5px;
+            border: none;
+            color: var(--text-color);
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--sidebar-hover-bg-color);
+            color: #ffffff;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px var(--box-shadow-color);
+            flex: 1;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px var(--box-shadow-color);
+        }
+
+        .card h2 {
+            font-size: 22px;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #16a085;
+            margin: 0;
+        }
+
+        .status {
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .good {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .warning {
+            background-color: #e67e22;
+            color: white;
+        }
+
+        .danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .chart, .event-log {
+            background-color: var(--card-bg-color);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px var(--box-shadow-color);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chart:hover, .event-log:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px var(--box-shadow-color);
+        }
+
+        .chart img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>R.A.S.S.</h1>
+        <a href="#" class="icon-dashboard" onclick="showDashboard()">Dashboard</a>
+        <a href="#" class="icon-connected-devices">Connected Devices</a>
+        <a href="#" class="icon-firewall">Firewall</a>
+        <a href="#" class="icon-dhcp">DHCP</a>
+        <a href="#" class="icon-administration">Administration</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Embedded Systems Web Server</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
+            <a href="#" class="logout-button">Logout</a>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h2>Current Time</h2>
+                <p id="sensor-timestamp">Loading...</p>
+                <span id="status-timestamp" class="status warning">Updating...</span>
+            </div>
+            <div class="card">
+                <h2>Temperature (°C)</h2>
+                <p id="sensor-temperature">Loading...</p>
+                <span id="status-temperature" class="status warning">Updating...</span>
+            </div>
+            <div class="card">
+                <h2>Voltage <br/> (V)</h2>
+                <p id="sensor-humidity">Loading...</p>
+                <span id="status-humidity" class="status warning">Updating...</span>
+            </div>
+            <div class="card">
+                <h2>Internal Pressure (hPa)</h2>
+                <p id="sensor-pressure">Loading...</p>
+                <span id="status-pressure" class="status warning">Updating...</span>
+            </div>
+            <div class="card">
+                <h2>Magnetic Field <br/>(nT)</h2>
+                <p id="sensor-light">Loading...</p>
+                <span id="status-light" class="status warning">Updating...</span>
+            </div>
+        </div>
+
+
+        <div id="dashboard-content" style="display: none;">
+            <div class="chart">
+                <h2>Temperature vs Time</h2>
+                <img src="temperature_chart.png" alt="Temperature Chart">
+            </div>
+            <div class="chart">
+
+                <h2>Voltage vs Time</h2>
+                <img src="humidity_chart.png" alt="Humidity Chart">
+            </div>
+            <div class="chart">
+                <h2>Internal Pressure vs Time</h2>
+                <img src="pressure_chart.png" alt="Pressure Chart">   
+                </div>
+            <div class="chart">
+                <h2>Magnetic Field vs Time</h2>
+                <img src="light_chart.png" alt="Light Chart">
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function toggleTheme() {
+            document.body.dataset.theme = document.body.dataset.theme === 'dark' ? '' : 'dark';
+        }
+
+        function showDashboard() {
+            var dashboardContent = document.getElementById('dashboard-content');
+            if (dashboardContent.style.display === 'none') {
+                dashboardContent.style.display = 'block';
+            } else {
+                dashboardContent.style.display = 'none';
+            }
+        }
+
+        function updateStatusIndicator(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (!value || value === 'No Data') {
+                element.className = 'status danger';
+                element.textContent = 'Invalid';
+            } else if (value === 'Loading...') {
+                element.className = 'status warning';
+                element.textContent = 'Updating...';
+            } else {
+                element.className = 'status good';
+                element.textContent = 'Valid';
+            }
+        }
+
+        function updateSensorData() {
+            fetch('/api/current')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data)
+                    const timestamp = data.timestamp || new Date().toLocaleString();
+                    // Update each sensor value with proper null checking
+                    const sensors = {
+                        timestamp: timestamp,
+                        temperature: data.temperature,
+                        humidity: data.humidity,
+                        pressure: data.pressure,
+                        light: data.light,
+                    };
+                    
+                    Object.entries(sensors).forEach(([sensor, value]) => {
+                        const displayValue = value !== null && value !== undefined
+                            ? (sensor === 'timestamp' ? value : value.toFixed(1))
+                            : 'No Data';
+                        
+                            document.getElementById(`sensor-${sensor}`).innerText = displayValue;
+                            updateStatusIndicator(`status-${sensor}`, value);
+                        });
+                        // console.log(displayValue)
+                })
+                .catch(error => {
+                    console.error('Error fetching sensor data:', error);
+                    const sensors = ['timestamp', 'temperature', 'humidity', 'pressure', 'light'];
+                    
+                    sensors.forEach(sensor => {
+                        document.getElementById(`sensor-${sensor}`).textContent = 'No Data';
+                        const statusElement = document.getElementById(`status-${sensor}`);
+                        statusElement.className = 'status danger';
+                        statusElement.textContent = 'Error';
+                    });
+                });
+        }
+
+        // Update sensor data every 1 seconds
+        updateSensorData(); // Initial update
+        setInterval(updateSensorData, 1000);
+    </script>
+</body>
+</html>
+

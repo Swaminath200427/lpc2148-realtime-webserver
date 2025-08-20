@@ -1,0 +1,147 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+F:\PROJECTS & RESEARCH\MP_PROJECT\webSERVER_1.2\SERVER.uvproj
+Project File Date:  10/03/2024
+
+<h2>Output:</h2>
+Rebuild target 'Target 1'
+assembling Startup.s...
+compiling main.c...
+main.c: Error:  #219: error while deleting file ".\main.d": Permission denied
+srcCODE\main.c: 0 warnings, 1 error
+compiling mongoose_custom_impl.c...
+srcCODE\sys_type.h(38): warning:  #1-D: last line of file ends without a newline
+  #endif /* _SYS_TYPES_H_ */
+srcCODE\unistd.h(37): warning:  #1-D: last line of file ends without a newline
+  #endif // _UNISTD_H
+srcCODE\sys_stat_h.h(37): warning:  #1-D: last line of file ends without a newline
+  #endif // SYS_STAT_H
+srcCODE\ws2tcpip.h(4): warning:  #1-D: last line of file ends without a newline
+  #endif
+srcCODE\process.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif // _PROCESS_H
+srcCODE\winerror.h(11): warning:  #1-D: last line of file ends without a newline
+  #endif // _WINERROR_H
+srcCODE\windows.h(72): warning:  #47-D: incompatible redefinition of macro "NULL" (declared at line 48 of "E:\Keil_v5\ARM\ARMCC\bin\..\include\string.h")
+  #define NULL ((void*)0)
+srcCODE\windows.h(76): warning:  #1-D: last line of file ends without a newline
+  #endif // _WINDOWS_H
+srcCODE\ws2tcpip.h(4): warning:  #1-D: last line of file ends without a newline
+  #endif
+srcCODE\winsock2.h(78): warning:  #1-D: last line of file ends without a newline
+  #endif // _WINSOCK2_H
+srcCODE\mongoose_custom_impl.c: 10 warnings, 0 errors
+compiling mongoose.c...
+srcCODE\sys_type.h(38): warning:  #1-D: last line of file ends without a newline
+  #endif /* _SYS_TYPES_H_ */
+srcCODE\unistd.h(37): warning:  #1-D: last line of file ends without a newline
+  #endif // _UNISTD_H
+srcCODE\sys_stat_h.h(37): warning:  #1-D: last line of file ends without a newline
+  #endif // SYS_STAT_H
+srcCODE\ws2tcpip.h(4): warning:  #1-D: last line of file ends without a newline
+  #endif
+srcCODE\process.h(15): warning:  #1-D: last line of file ends without a newline
+  #endif // _PROCESS_H
+srcCODE\winerror.h(11): warning:  #1-D: last line of file ends without a newline
+  #endif // _WINERROR_H
+srcCODE\windows.h(72): warning:  #47-D: incompatible redefinition of macro "NULL" (declared at line 48 of "E:\Keil_v5\ARM\ARMCC\bin\..\include\string.h")
+  #define NULL ((void*)0)
+srcCODE\windows.h(76): warning:  #1-D: last line of file ends without a newline
+  #endif // _WINDOWS_H
+srcCODE\ws2tcpip.h(4): warning:  #1-D: last line of file ends without a newline
+  #endif
+srcCODE\winsock2.h(78): warning:  #1-D: last line of file ends without a newline
+  #endif // _WINSOCK2_H
+srcCODE\ws2tcpip.h(4): warning:  #1-D: last line of file ends without a newline
+  #endif
+srcCODE\sys_select.h(8): warning:  #1-D: last line of file ends without a newline
+  #endif // _SYS_SELECT_H
+srcCODE\sys_time.h(12): warning:  #231-D: declaration is not visible outside of function
+  int gettimeofday(struct timeval *tv, struct timezone *tz);
+srcCODE\sys_time.h(21): warning:  #1-D: last line of file ends without a newline
+  #endif // _SYS_TIME_H
+srcCODE\custom_errno.h(50): warning:  #1-D: last line of file ends without a newline
+  #endif // CUSTOM_ERRNO_H
+srcCODE\mongoose.c(56): warning:  #1295-D: Deprecated declaration WSAGetLastError - give arg types
+  int WSAGetLastError();
+srcCODE\mongoose.c(85): error:  #77-D: this declaration has no storage class or type specifier
+  res.s_addr = ifp->ip;
+srcCODE\mongoose.c(85): error:  #147: declaration is incompatible with "struct my_in_addr res" (declared at line 84)
+  res.s_addr = ifp->ip;
+srcCODE\mongoose.c(85): error:  #65: expected a ";"
+  res.s_addr = ifp->ip;
+srcCODE\mongoose.c(128): warning:  #550-D: variable "result" was set but never used
+                        int result;
+srcCODE\mongoose.c(4474): warning:  #9-D: nested comment is not allowed
+  /*void mg_mqtt_login(struct mg_connection *c, const struct mg_mqtt_opts *opts) {
+srcCODE\mongoose.c(4510): warning:  #9-D: nested comment is not allowed
+    /*mg_mqtt_send_header(c, MQTT_CMD_CONNECT, 0, (uint32_t) total_len);
+srcCODE\mongoose.c(4678): warning:  #9-D: nested comment is not allowed
+              /*MG_DEBUG(("%lu [%.*s] -> [%.*s]", c->id, (int) mm.topic.len,
+srcCODE\mongoose.c(5381): warning:  #111-D: statement is unreachable
+      if (c->is_udp && pkt->udp && c->loc.port == pkt->udp->dport) break;
+srcCODE\mongoose.c(5510): error:  #154: expression must have struct or union type
+        res.s_addr = ifp->ip;
+srcCODE\mongoose.c(5511): error:  #154: expression must have struct or union type
+  ((uint8_t *) (&res.s_addr))[3]++;                // Offer our IP + 1
+srcCODE\mongoose.c(5528): error:  #154: expression must have struct or union type
+      memcpy(&res.s_addr, pkt->dhcp->hwaddr, 6);
+srcCODE\mongoose.c(5531): error:  #154: expression must have struct or union type
+      memcpy(&res.options, opts, sizeof(opts));
+srcCODE\mongoose.c(5532): error:  #154: expression must have struct or union type
+      res.magic = pkt->dhcp->magic;
+srcCODE\mongoose.c(5533): error:  #154: expression must have struct or union type
+      res.xid = pkt->dhcp->xid;
+srcCODE\mongoose.c(5535): error:  #154: expression must have struct or union type
+        ifp->gw = res.yiaddr;
+srcCODE\mongoose.c(5539): error:  #154: expression must have struct or union type
+             op == 1 ? ~0U : res.yiaddr, mg_htons(68), &res, sizeof(res));
+srcCODE\mongoose.c(5549): error:  #167: argument of type "__packed uint32_t *" is incompatible with parameter of type "const void *restrict"
+      memcpy(c->rem.ip, &pkt->ip->src, sizeof(uint32_t));
+srcCODE\mongoose.c(5594): error:  #167: argument of type "__packed uint32_t *" is incompatible with parameter of type "const void *"
+    cs = csumup(cs, &ip->src, sizeof(ip->src));
+srcCODE\mongoose.c(5595): error:  #167: argument of type "__packed uint32_t *" is incompatible with parameter of type "const void *"
+    cs = csumup(cs, &ip->dst, sizeof(ip->dst));
+srcCODE\mongoose.c(5625): error:  #167: argument of type "__packed uint32_t *" is incompatible with parameter of type "const void *restrict"
+    memcpy((void *)c->rem.ip, &pkt->ip->src, sizeof(uint32_t));
+srcCODE\mongoose.c(8250): error:  #136: struct "mg_str" has no field "ptr"
+      str->ptr = (char *)s;
+srcCODE\mongoose.c(8256): error:  #144: a value of type "const char *" cannot be used to initialize an entity of type "char *"
+    return (struct mg_str){s, n};
+srcCODE\mongoose.c(16840): error:  #20: identifier "ance" is undefined
+  static void mg_ws_cb(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {ance
+srcCODE\mongoose.c(16841): error:  #65: expected a ";"
+    if (ev == MG_EV_READ) {
+srcCODE\mongoose.c(16863): warning:  #12-D: parsing restarts here after previous syntax error
+            MG_DEBUG(("%s", "WS PONG"));
+srcCODE\mongoose.c(16864): error:  #20: identifier "s" is undefined
+            mg_ws_send(c, s, m.data.len, WEBSOCKET_OP_PONG);
+srcCODE\mongoose.c(16864): error:  #20: identifier "m" is undefined
+            mg_ws_send(c, s, m.data.len, WEBSOCKET_OP_PONG);
+srcCODE\mongoose.c(16866): error:  #116: a break statement may only be used within a loop or switch
+            break;
+srcCODE\mongoose.c(16867): error:  #121: a case label may only be used within a switch
+          case WEBSOCKET_OP_PONG:
+srcCODE\mongoose.c(16869): error:  #116: a break statement may only be used within a loop or switch
+            break;
+srcCODE\mongoose.c(16870): error:  #121: a case label may only be used within a switch
+          case WEBSOCKET_OP_TEXT:
+srcCODE\mongoose.c(16871): error:  #121: a case label may only be used within a switch
+          case WEBSOCKET_OP_BINARY:
+srcCODE\mongoose.c(16872): error:  #20: identifier "final" is undefined
+            if (final) mg_call(c, MG_EV_WS_MSG, &m);
+srcCODE\mongoose.c(16873): error:  #116: a break statement may only be used within a loop or switch
+            break;
+srcCODE\mongoose.c(16874): error:  #121: a case label may only be used within a switch
+          case WEBSOCKET_OP_CLOSE:
+srcCODE\mongoose.c(16880): error:  #116: a break statement may only be used within a loop or switch
+            break;
+srcCODE\mongoose.c: 22 warnings, 30 errors
+".\SERVER.axf" - 31 Error(s), 32 Warning(s).
+Target not created
+</pre>
+</body>
+</html>

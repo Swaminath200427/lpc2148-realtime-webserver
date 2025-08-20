@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [{
+      "label": "Build Keil Project",
+      "type": "shell",
+      "command": "E://Keil_v5//UV4//UV4.exe",  // Update this path to point to UV4.exe or UV5.exe
+      "args": [
+        "-b",
+        "${workspaceFolder}\\F://PROJECTS & RESEARCH//MP_PROJECT//webSERVER_1_2.uvproj",  // Update this path to point to your .uvproj file
+        "-o",
+        "${workspaceFolder}\\build_output.log"  // Optional: Log output to a file
+      ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+]
+  }
+  

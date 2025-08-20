@@ -1,0 +1,9 @@
+{
+    "keil.root": "E://Keil_v5",  // Replace this path with your Keil installation path
+    "files.associations": {
+      "*.h": "c",
+      "*.c": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+  }
+  

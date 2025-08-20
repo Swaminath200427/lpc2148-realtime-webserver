@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Systems Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        :root {
+            --bg-color: #f3f4f6;
+            --text-color: #2c3e50;
+            --card-bg-color: #ffffff;
+            --sidebar-bg-color: #34495e;
+            --sidebar-hover-bg-color: #1abc9c;
+            --header-bg-color: #ecf0f1;
+            --box-shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --card-bg-color: #34495e;
+            --sidebar-bg-color: #2c3e50;
+            --sidebar-hover-bg-color: #16a085;
+            --header-bg-color: #34495e;
+            --box-shadow-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+            box-shadow: 5px 0 15px var(--box-shadow-color);
+        }
+
+        .sidebar h1 {
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .sidebar a {
+            color: #bdc3c7;
+            text-decoration: none;
+            margin: 15px 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--sidebar-hover-bg-color);
+            color: #ffffff;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .header .logout-button {
+            background-color: #e74c3c;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .header .logout-button:hover {
+            background-color: #c0392b;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px;
+            background-color: var(--header-bg-color);
+            border-radius: 5px;
+            border: none;
+            color: var(--text-color);
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--sidebar-hover-bg-color);
+            color: #ffffff;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px var(--box-shadow-color);
+            flex: 1;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px var(--box-shadow-color);
+        }
+
+        .card h2 {
+            font-size: 22px;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #16a085;
+            margin: 0;
+        }
+
+        .status {
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .good {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .warning {
+            background-color: #e67e22;
+            color: white;
+        }
+
+        .danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .chart, .event-log {
+            background-color: var(--card-bg-color);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px var(--box-shadow-color);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chart:hover, .event-log:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px var(--box-shadow-color);
+        }
+
+        .event-log table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .event-log table th, .event-log table td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            text-align: left;
+            color: var(--text-color);
+        }
+
+        .event-log table th {
+            background-color: #bdc3c7;
+            color: var(--text-color);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .event-log table td {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .chart img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>R.A.S.S.</h1>
+        <a href="#" class="icon-dashboard">Dashboard</a>
+        <a href="#" class="icon-connected-devices">Connected Devices</a>
+        <a href="#" class="icon-firewall">Firewall</a>
+        <a href="#" class="icon-dhcp">DHCP</a>
+        <a href="#" class="icon-administration">Administration</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Embedded Systems Web Server</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
+            <a href="#" class="logout-button">Logout</a>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h2>ID</h2>
+                <p>{{ data.id }}</p> <!-- Dynamic data here -->
+                <span class="status danger">High</span>
+            </div>
+            <div class="card">
+                <h2>Sensor ID</h2>
+                <p>{{ data.sensor_id }}</p> <!-- Dynamic data here -->
+                <span class="status good">Normal</span>
+            </div>
+            <div class="card">
+                <h2>Timestamp</h2>
+                <p>{{ data.timestamp }}</p> <!-- Dynamic data here -->
+                <span class="status good">Normal</span>
+            </div>
+            <div class="card">
+                <h2>Data Value</h2>
+                <p>{{ data.data_value }}</p> <!-- Dynamic data here -->
+                <span class="status good">Normal</span>
+            </div>
+            <div class="card">
+                <h2>Status code</h2>
+                <p>{{ data.status_code }}</p> <!-- Dynamic data here -->
+                <span class="status warning">Pending</span>
+            </div>
+        </div>
+
+        <div class="chart">
+            <h2>Internet Speed, Last 24H</h2>
+            <img src="Bar_ Graph.png" alt="Chart Placeholder">
+        </div>
+
+        <div class="event-log">
+            <h2>Event Log</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Priority</th>
+                        <th>Time</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Network</td>
+                        <td><span class="status danger">High</span></td>
+                        <td>01-09-2024</td>
+                        <td>Network event details</td>
+                    </tr>
+                    <tr>
+                        <td>Optic</td>
+                        <td><span class="status good">Low</span></td>
+                        <td>01-09-2024</td>
+                        <td>Optic event details</td>
+                    </tr>
+                    <tr>
+                        <td>Power</td>
+                        <td><span class="status warning">Medium</span></td>
+                        <td>01-09-2024</td>
+                        <td>Power event details</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        }
+    </script>
+</body>
+</html>
+		//SQL
+CREATE DATABASE sensor_data_db;
+USE sensor_data_db;
+CREATE TABLE SensorData
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sensor_id VARCHAR(50),
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    data_value FLOAT,
+     status_code VARCHAR(20)
+);
+
+		//FLASK
+from flask import Flask, render_template
+import mysql.connector
+import os
+
+app = Flask(__name__)
+
+# Function to connect to the database
+def connect_to_database():
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",
+            port="3306",
+            user="root",
+            password="Rishi@2003",
+            database="sensor_data_db"
+        )
+        if conn.is_connected():
+            return conn
+    except mysql.connector.Error as e:
+        print(f"Error: {e}")
+        return None
+
+@app.route('/')
+def home():
+    conn = connect_to_database()
+    if conn is None:
+        return "Failed to connect to the database."
+
+    cursor = None
+    try:
+        cursor = conn.cursor()
+        cursor.execute('SELECT id, sensor_id, timestamp, data_value, status_code FROM SensorData LIMIT 1')  # Fetch only one record for demonstration
+        row = cursor.fetchone()
+
+        if row:
+            # Map the row to the variables expected by the frontend
+            data = {
+                'id': row[0],
+                'sensor_id': row[1],
+                'timestamp': row[2],
+                'data_value': row[3],
+                'status_code': row[4]
+            }
+        else:
+            data = None  # If no data, fallback
+        
+        # Pass the fetched data to the 'index.html' template
+        return render_template('index.html', data=data)
+
+    except mysql.connector.Error as e:
+        return f"Error fetching data: {e}"
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+# Correct main block to start the server
+if __name__ == "__main__":
+    app.run(debug=True)
+
+			// OTHER INDEX.HTML FILE
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Systems Dashboard</title>
+    <style>
+        /* Your existing CSS */
+        /* ... */
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>R.A.S.S.</h1>
+        <a href="#" class="icon-dashboard">Dashboard</a>
+        <a href="#" class="icon-connected-devices">Connected Devices</a>
+        <a href="#" class="icon-firewall">Firewall</a>
+        <a href="#" class="icon-dhcp">DHCP</a>
+        <a href="#" class="icon-administration">Administration</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Embedded Systems Web Server</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
+            <a href="#" class="logout-button">Logout</a>
+        </div>
+
+        <!-- Cards to display data dynamically -->
+        <div class="cards">
+            <div class="card">
+                <h2>ID</h2>
+                <p id="sensor-id">Loading...</p>
+                <span id="status-id" class="status danger">Loading...</span>
+            </div>
+            <div class="card">
+                <h2>Sensor ID</h2>
+                <p id="sensor-sensor-id">Loading...</p>
+                <span id="status-sensor-id" class="status good">Loading...</span>
+            </div>
+            <div class="card">
+                <h2>Timestamp</h2>
+                <p id="sensor-timestamp">Loading...</p>
+                <span id="status-timestamp" class="status good">Loading...</span>
+            </div>
+            <div class="card">
+                <h2>Data Value</h2>
+                <p id="sensor-data-value">Loading...</p>
+                <span id="status-data-value" class="status good">Loading...</span>
+            </div>
+            <div class="card">
+                <h2>Status Code</h2>
+                <p id="sensor-status-code">Loading...</p>
+                <span id="status-status-code" class="status warning">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Your existing chart and event log -->
+        <div class="chart">
+            <h2>Internet Speed, Last 24H</h2>
+            <img src="Bar_Graph.png" alt="Chart Placeholder">
+        </div>
+
+        <div class="event-log">
+            <h2>Event Log</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Priority</th>
+                        <th>Time</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Network</td>
+                        <td><span class="status danger">High</span></td>
+                        <td>01-09-2024</td>
+                        <td>Network event details</td>
+                    </tr>
+                    <tr>
+                        <td>Optic</td>
+                        <td><span class="status good">Low</span></td>
+                        <td>01-09-2024</td>
+                        <td>Optic event details</td>
+                    </tr>
+                    <tr>
+                        <td>Power</td>
+                        <td><span class="status warning">Medium</span></td>
+                        <td>01-09-2024</td>
+                        <td>Power event details</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle theme
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        }
+
+        // Function to fetch data from Flask server (localhost:5000)
+        function fetchData() {
+            fetch('http://localhost:5000/')
+            .then(response => response.text()) // Expect HTML response from Flask (as template is rendered)
+            .then(data => {
+                // Here, you can parse and update the DOM with the data received from Flask.
+                // Assuming 'data' contains sensor information.
+                console.log(data); // For debugging purposes, inspect what data looks like.
+
+                // Example: Update the dynamic fields with fetched data
+                document.getElementById('sensor-id').innerText = data.id || 'No Data';
+                document.getElementById('sensor-sensor-id').innerText = data.sensor_id || 'No Data';
+                document.getElementById('sensor-timestamp').innerText = data.timestamp || 'No Data';
+                document.getElementById('sensor-data-value').innerText = data.data_value || 'No Data';
+                document.getElementById('sensor-status-code').innerText = data.status_code || 'No Data';
+
+                // You can adjust status color dynamically as well, e.g.:
+                // document.getElementById('status-id').className = data.some_condition ? 'status good' : 'status danger';
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Fetch data when the page loads
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
+
+			//FINAL INDEX.HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Systems Dashboard</title>
+    <style>
+       body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        :root {
+            --bg-color: #f3f4f6;
+            --text-color: #2c3e50;
+            --card-bg-color: #ffffff;
+            --sidebar-bg-color: #34495e;
+            --sidebar-hover-bg-color: #1abc9c;
+            --header-bg-color: #ecf0f1;
+            --box-shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --card-bg-color: #34495e;
+            --sidebar-bg-color: #2c3e50;
+            --sidebar-hover-bg-color: #16a085;
+            --header-bg-color: #34495e;
+            --box-shadow-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+            box-shadow: 5px 0 15px var(--box-shadow-color);
+        }
+
+        .sidebar h1 {
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .sidebar a {
+            color: #bdc3c7;
+            text-decoration: none;
+            margin: 15px 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--sidebar-hover-bg-color);
+            color: #ffffff;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .header .logout-button {
+            background-color: #e74c3c;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .header .logout-button:hover {
+            background-color: #c0392b;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px;
+            background-color: var(--header-bg-color);
+            border-radius: 5px;
+            border: none;
+            color: var(--text-color);
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--sidebar-hover-bg-color);
+            color: #ffffff;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px var(--box-shadow-color);
+            flex: 1;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px var(--box-shadow-color);
+        }
+
+        .card h2 {
+            font-size: 22px;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #16a085;
+            margin: 0;
+        }
+
+        .status {
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .good {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .warning {
+            background-color: #e67e22;
+            color: white;
+        }
+
+        .danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .chart, .event-log {
+            background-color: var(--card-bg-color);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px var(--box-shadow-color);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chart:hover, .event-log:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px var(--box-shadow-color);
+        }
+
+        .event-log table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .event-log table th, .event-log table td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            text-align: left;
+            color: var(--text-color);
+        }
+
+        .event-log table th {
+            background-color: #bdc3c7;
+            color: var(--text-color);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .event-log table td {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .chart img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>R.A.S.S.</h1>
+        <a href="#" class="icon-dashboard">Dashboard</a>
+        <a href="#" class="icon-connected-devices">Connected Devices</a>
+        <a href="#" class="icon-firewall">Firewall</a>
+        <a href="#" class="icon-dhcp">DHCP</a>
+        <a href="#" class="icon-administration">Administration</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Embedded Systems Web Server</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">Switch Theme</button>
+            <a href="#" class="logout-button">Logout</a>
+        </div>
+
+        <!-- Cards to display data dynamically -->
+        <div class="cards">
+            <div class="card">
+                <h2>ID</h2>
+                <p id="sensor-id">{{ current_data.id if current_data else 'No Data' }}</p>
+                <span id="status-id" class="status danger">{{ 'Active' if current_data else 'Inactive' }}</span>
+            </div>
+            <div class="card">
+                <h2>Sensor ID</h2>
+                <p id="sensor-sensor-id">{{ current_data.sensor_id if current_data else 'No Data' }}</p>
+                <span id="status-sensor-id" class="status good">{{ 'Active' if current_data else 'Inactive' }}</span>
+            </div>
+            <div class="card">
+                <h2>Timestamp</h2>
+                <p id="sensor-timestamp">{{ current_data.timestamp if current_data else 'No Data' }}</p>
+                <span id="status-timestamp" class="status good">{{ 'Recent' if current_data else 'Outdated' }}</span>
+            </div>
+            <div class="card">
+                <h2>Data Value</h2>
+                <p id="sensor-data-value">{{ current_data.data_value if current_data else 'No Data' }}</p>
+                <span id="status-data-value" class="status good">{{ 'Valid' if current_data else 'Invalid' }}</span>
+            </div>
+            <div class="card">
+                <h2>Status Code</h2>
+                <p id="sensor-status-code">{{ current_data.status_code if current_data else 'No Data' }}</p>
+                <span id="status-status-code" class="status warning">{{ 'OK' if current_data and current_data.status_code == 200 else 'Warning' }}</span>
+            </div>
+        </div>
+
+        <!-- Your existing chart and event log -->
+        <div class="chart">
+            <h2>Internet Speed, Last 24H</h2>
+            <img src="Bar_Graph.png" alt="Chart Placeholder">
+        </div>
+
+        <div class="event-log">
+            <h2>Event Log</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Priority</th>
+                        <th>Time</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in historical_data[:3] %}
+                    <tr>
+                        <td>Sensor</td>
+                        <td><span class="status {{ 'good' if data.status_code == 200 else 'warning' }}">{{ 'Low' if data.status_code == 200 else 'Medium' }}</span></td>
+                        <td>{{ data.timestamp }}</td>
+                        <td>Sensor ID: {{ data.sensor_id }}, Value: {{ data.data_value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle theme
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        }
+
+        // Function to fetch data from Flask server
+        function fetchData() {
+            fetch('/api/current')
+            .then(response => response.json())
+            .then(data => {
+                // Update the dynamic fields with fetched data
+                document.getElementById('sensor-id').innerText = data.id || 'No Data';
+                document.getElementById('sensor-sensor-id').innerText = data.sensor_id || 'No Data';
+                document.getElementById('sensor-timestamp').innerText = data.timestamp || 'No Data';
+                document.getElementById('sensor-data-value').innerText = data.data_value || 'No Data';
+                document.getElementById('sensor-status-code').innerText = data.status_code || 'No Data';
+
+                // Update status indicators
+                document.getElementById('status-id').className = data.id ? 'status good' : 'status danger';
+                document.getElementById('status-sensor-id').className = data.sensor_id ? 'status good' : 'status danger';
+                document.getElementById('status-timestamp').className = data.timestamp ? 'status good' : 'status danger';
+                document.getElementById('status-data-value').className = data.data_value ? 'status good' : 'status danger';
+                document.getElementById('status-status-code').className = data.status_code == 200 ? 'status good' : 'status warning';
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Fetch data when the page loads and then every 5 seconds
+        window.onload = function() {
+            fetchData();
+            setInterval(fetchData, 5000);
+        };
+    </script>
+</body>
+</html>
+		// app.py query
+query = """INSERT INTO SensorData 
+                  (sensor_id, data_value, status_code, timestamp) 
+                  VALUES (%s, %s, %s, %s)"""
+        
+        # Assuming the mongoose data format matches your needs
+        values = (
+            sensor_data.get('sensor_id', 1),  # Default sensor_id
+            sensor_data.get('value', 0.0),    # Sensor value
+            sensor_data.get('status', 200),    # Status code
+            datetime.now()                     # Current timestamp
+        )
+		//app.py home
+cursor = conn.cursor()
+        
+        # Fetch latest records
+        cursor.execute('''
+            SELECT id, sensor_id, timestamp, data_value, status_code 
+            FROM SensorData 
+            ORDER BY timestamp DESC 
+            LIMIT 10
+        ''')
+        rows = cursor.fetchall()
+
+        # Format data for template
+        data = [{
+            'id': row[0],
+            'sensor_id': row[1],
+            'timestamp': row[2],
+            'data_value': row[3],
+            'status_code': row[4]
+        } for row in rows]
+
+// app.py historical data
+
+cursor.execute('''
+            SELECT id, sensor_id, timestamp, data_value, status_code 
+            FROM SensorData 
+            ORDER BY timestamp DESC 
+            LIMIT 100
+        ''')
+        rows = cursor.fetchall()
+
+        data = [{
+            'id': row[0],
+            'sensor_id': row[1],
+            'timestamp': row[2].isoformat(),
+            'data_value': row[3],
+            'status_code': row[4]
+        } for row in rows]
+
+//CMakeLists.txt
+
+cmake_minimum_required(VERSION 3.10)
+project(WEBSERVER_1_2)
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED True)
+
+# Include directories for headers
+include_directories("F:\\PROJECTS & RESEARCH\\MP_PROJECT\\webSERVER_1_2\\inc")
+
+# Specify the sources including mongoose and any other necessary files
+set(SOURCES src/main.c src/mongoose.c src/mongoose_custom_impl.c src/Sensor_rand.c)
+
+# Add the shared library target
+add_library(mylibrary SHARED ${SOURCES})
+
+# Link to Windows sockets library for networking functions like WSAStartup
+target_link_libraries(mylibrary ws2_32)
+
+# Define necessary macros for mongoose (adjust based on your usage)
+add_definitions(-DMG_ENABLE_HTTP -DMG_ENABLE_WEBSOCKET -DMG_ENABLE_MQTT)
+
+# Specify the output directory for the DLL
+set_target_properties(mylibrary PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+// COMMANDS IN BASH
+
+cd "F:/PROJECTS & RESEARCH/MP_PROJECT/webSERVER_1_2"
+
+Remove the existing build directory:
+
+bashCopyrm -rf build
+
+Create a new build directory and navigate to it:
+
+bashCopymkdir build
+cd build
+
+Now run CMake and build:
+
+bashCopycmake .. -G "MinGW Makefiles" -DCMAKE_C_COMPILER=gcc
+cmake --build .

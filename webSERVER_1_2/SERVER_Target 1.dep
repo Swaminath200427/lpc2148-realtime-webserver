@@ -1,0 +1,112 @@
+Dependencies for Project 'SERVER', Target 'Target 1': (DO NOT MODIFY !)
+F (.\Startup.s)(0x532C14EA)(--cpu ARM7TDMI --pd "__EVAL SETA 1" -g --apcs=interwork -I E:\Keil_v5\ARM\RV31\INC-I E:\Keil_v5\ARM\CMSIS\Include-I E:\Keil_v5\ARM\Inc\Philips--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\srcCODE\mongoose_config.h)(0x66CEEFD3)()
+F (.\srcCODE\ENC28J60.h)(0x66D454C2)()
+F (.\srcCODE\sys_stat_h.h)(0x66DF2647)()
+F (.\srcCODE\mongoose_custom_config.h)(0x66D4AE8B)()
+F (.\srcCODE\lpc214x.h)(0x66D45BF8)()
+F (.\srcCODE\portable_restrict.h)(0x66D45BFE)()
+F (.\srcCODE\main.c)(0x66E7FA5F)(--c99 -c --cpu ARM7TDMI -D__EVAL -g -O0 --apcs=interwork -I.\srcCODE -I.\srcCODE -I.\.vscode-I E:\Keil_v5\ARM\RV31\INC-I E:\Keil_v5\ARM\CMSIS\Include-I E:\Keil_v5\ARM\Inc\Philips-DMG_ARCH="MG_ARCH_WIN32"-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+I (E:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\limits.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\time.h)(0x51C7E87C)
+I (srcCODE\lpc214x.h)(0x66D45BF8)
+I (srcCODE\mongoose_custom_config.h)(0x66D4AE8B)
+I (srcCODE\mongoose.h)(0x66E807E6)
+I (srcCODE\portable_restrict.h)(0x66D45BFE)
+I (srcCODE\mongoose_config.h)(0x66CEEFD3)
+I (E:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x51C7E87C)
+I (srcCODE\direct.h)(0x66D4AF1A)
+I (E:\Keil_v5\ARM\ARMCC\include\errno.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\signal.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\string.h)(0x51C7E87C)
+I (srcCODE\sys_stat_h.h)(0x66DF2647)
+I (srcCODE\unistd.h)(0x66DEA797)
+I (srcCODE\sys_type.h)(0x66E298B8)
+I (srcCODE\ws2tcpip.h)(0x66D4B607)
+I (srcCODE\process.h)(0x66DEA815)
+I (srcCODE\winerror.h)(0x66DEA8C7)
+I (srcCODE\winsock2.h)(0x66E2B18C)
+I (srcCODE\windows.h)(0x66DF2C74)
+I (srcCODE\mongoose_custom_impl.c)(0x66D4A1C1)
+I (srcCODE\ENC28J60.h)(0x66D454C2)
+I (srcCODE\netinet_in.h)(0x66E3AC8D)
+I (srcCODE\arpa_inet.h)(0x66E3A7CC)
+F (.\srcCODE\mongoose_custom_impl.c)(0x66D4A1C1)(--c99 -c --cpu ARM7TDMI -D__EVAL -g -O0 --apcs=interwork -I.\srcCODE -I.\srcCODE -I.\.vscode-I E:\Keil_v5\ARM\RV31\INC-I E:\Keil_v5\ARM\CMSIS\Include-I E:\Keil_v5\ARM\Inc\Philips-DMG_ARCH="MG_ARCH_WIN32"-o .\mongoose_custom_impl.o --omf_browse .\mongoose_custom_impl.crf --depend .\mongoose_custom_impl.d)
+I (srcCODE\mongoose_custom_config.h)(0x66D4AE8B)
+I (srcCODE\mongoose.h)(0x66E807E6)
+I (E:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x51C7E87C)
+I (srcCODE\portable_restrict.h)(0x66D45BFE)
+I (srcCODE\mongoose_config.h)(0x66CEEFD3)
+I (E:\Keil_v5\ARM\ARMCC\include\time.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x51C7E87C)
+I (srcCODE\direct.h)(0x66D4AF1A)
+I (E:\Keil_v5\ARM\ARMCC\include\errno.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\limits.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\signal.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\string.h)(0x51C7E87C)
+I (srcCODE\sys_stat_h.h)(0x66DF2647)
+I (srcCODE\unistd.h)(0x66DEA797)
+I (srcCODE\sys_type.h)(0x66E298B8)
+I (srcCODE\ws2tcpip.h)(0x66D4B607)
+I (srcCODE\process.h)(0x66DEA815)
+I (srcCODE\winerror.h)(0x66DEA8C7)
+I (srcCODE\winsock2.h)(0x66E2B18C)
+I (srcCODE\windows.h)(0x66DF2C74)
+F (.\srcCODE\mongoose.c)(0x66FE2582)(--c99 -c --cpu ARM7TDMI -D__EVAL -g -O0 --apcs=interwork -I.\srcCODE -I.\srcCODE -I.\.vscode-I E:\Keil_v5\ARM\RV31\INC-I E:\Keil_v5\ARM\CMSIS\Include-I E:\Keil_v5\ARM\Inc\Philips-DMG_ARCH="MG_ARCH_WIN32"-o .\mongoose.o --omf_browse .\mongoose.crf --depend .\mongoose.d)
+I (E:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x51C7E87C)
+I (srcCODE\mongoose.h)(0x66E807E6)
+I (E:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x51C7E87C)
+I (srcCODE\portable_restrict.h)(0x66D45BFE)
+I (srcCODE\mongoose_config.h)(0x66CEEFD3)
+I (E:\Keil_v5\ARM\ARMCC\include\time.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x51C7E87C)
+I (srcCODE\direct.h)(0x66D4AF1A)
+I (E:\Keil_v5\ARM\ARMCC\include\errno.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\limits.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\signal.h)(0x51C7E87C)
+I (E:\Keil_v5\ARM\ARMCC\include\string.h)(0x51C7E87C)
+I (srcCODE\sys_stat_h.h)(0x66DF2647)
+I (srcCODE\unistd.h)(0x66DEA797)
+I (srcCODE\sys_type.h)(0x66E298B8)
+I (srcCODE\ws2tcpip.h)(0x66D4B607)
+I (srcCODE\process.h)(0x66DEA815)
+I (srcCODE\winerror.h)(0x66DEA8C7)
+I (srcCODE\winsock2.h)(0x66E2B18C)
+I (srcCODE\windows.h)(0x66DF2C74)
+I (srcCODE\sys_time.h)(0x66E298EB)
+I (srcCODE\sys_select.h)(0x66E16414)
+I (srcCODE\arpa_inet.h)(0x66E3A7CC)
+I (srcCODE\netinet_in.h)(0x66E3AC8D)
+I (srcCODE\sys_socket.h)(0x66E7E51E)
+I (srcCODE\custom_errno.h)(0x66E800D7)
+F (.\srcCODE\mongoose.h)(0x66E807E6)()
+F (.\srcCODE\direct.h)(0x66D4AF1A)()
+F (.\srcCODE\ws2tcpip.h)(0x66D4B607)()
+F (.\srcCODE\unistd.h)(0x66DEA797)()
+F (.\srcCODE\process.h)(0x66DEA815)()
+F (.\srcCODE\winerror.h)(0x66DEA8C7)()
+F (.\srcCODE\winsock2.h)(0x66E2B18C)()
+F (.\srcCODE\windows.h)(0x66DF2C74)()
+F (.\srcCODE\sys_time.h)(0x66E298EB)()
+F (.\srcCODE\sys_select.h)(0x66E16414)()
+F (.\srcCODE\sys_type.h)(0x66E298B8)()
+F (.\srcCODE\sys_socket.h)(0x66E7E51E)()
+F (.\srcCODE\netinet_in.h)(0x66E3AC8D)()
+F (.\srcCODE\arpa_inet.h)(0x66E3A7CC)()
+F (.\srcCODE\std_bool.h)(0x66E3B449)()
+F (.\srcCODE\custom_errno.h)(0x66E800D7)()

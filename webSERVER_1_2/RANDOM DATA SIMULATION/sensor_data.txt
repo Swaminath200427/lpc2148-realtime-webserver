@@ -1,0 +1,405 @@
+Temperature: 22.87 °C
+Humidity: 18.59 %
+Pressure: 995.37 hPa
+Light Intensity: 284.04 lux
+---------------------------
+Temperature: 42.25 °C
+Humidity: 77.13 %
+Pressure: 964.28 hPa
+Light Intensity: 166.14 lux
+---------------------------
+Temperature: 42.39 °C
+Humidity: 86.00 %
+Pressure: 972.06 hPa
+Light Intensity: 946.47 lux
+---------------------------
+Temperature: 37.11 °C
+Humidity: 98.58 %
+Pressure: 1031.93 hPa
+Light Intensity: 907.50 lux
+---------------------------
+Temperature: 37.11 °C
+Humidity: 98.58 %
+Pressure: 1031.93 hPa
+Light Intensity: 907.50 lux
+---------------------------
+Temperature: 40.49 °C
+Humidity: 31.51 %
+Pressure: 981.77 hPa
+Light Intensity: 993.22 lux
+---------------------------
+Temperature: 40.64 °C
+Humidity: 37.19 %
+Pressure: 1016.66 hPa
+Light Intensity: 179.63 lux
+---------------------------
+Temperature: 34.54 °C
+Humidity: 63.22 %
+Pressure: 978.09 hPa
+Light Intensity: 612.84 lux
+---------------------------
+Temperature: 36.05 °C
+Humidity: 27.99 %
+Pressure: 1009.23 hPa
+Light Intensity: 461.62 lux
+---------------------------
+Temperature: 36.24 °C
+Humidity: 94.49 %
+Pressure: 1043.81 hPa
+Light Intensity: 725.94 lux
+---------------------------
+Temperature: 36.42 °C
+Humidity: 29.78 %
+Pressure: 960.32 hPa
+Light Intensity: 52.80 lux
+---------------------------
+Temperature: 36.90 °C
+Humidity: 43.63 %
+Pressure: 992.10 hPa
+Light Intensity: 18.16 lux
+---------------------------
+Temperature: 36.92 °C
+Humidity: 40.44 %
+Pressure: 1019.20 hPa
+Light Intensity: 424.30 lux
+---------------------------
+Temperature: 36.93 °C
+Humidity: 71.65 %
+Pressure: 1037.27 hPa
+Light Intensity: 361.71 lux
+---------------------------
+Temperature: 36.95 °C
+Humidity: 1.25 %
+Pressure: 1018.89 hPa
+Light Intensity: 502.21 lux
+---------------------------
+Temperature: 37.00 °C
+Humidity: 60.48 %
+Pressure: 982.13 hPa
+Light Intensity: 783.17 lux
+---------------------------
+Temperature: 37.05 °C
+Humidity: 50.90 %
+Pressure: 963.43 hPa
+Light Intensity: 1.53 lux
+---------------------------
+Temperature: 42.45 °C
+Humidity: 74.49 %
+Pressure: 1024.44 hPa
+Light Intensity: 282.48 lux
+---------------------------
+Temperature: 37.14 °C
+Humidity: 67.75 %
+Pressure: 953.47 hPa
+Light Intensity: 766.50 lux
+---------------------------
+Temperature: 37.21 °C
+Humidity: 89.39 %
+Pressure: 952.84 hPa
+Light Intensity: 922.30 lux
+---------------------------
+Temperature: 22.92 °C
+Humidity: 25.31 %
+Pressure: 998.83 hPa
+Light Intensity: 939.85 lux
+---------------------------
+Temperature: 37.31 °C
+Humidity: 4.64 %
+Pressure: 1006.43 hPa
+Light Intensity: 890.35 lux
+---------------------------
+Temperature: 44.00 °C
+Humidity: 32.75 %
+Pressure: 1021.78 hPa
+Light Intensity: 902.49 lux
+---------------------------
+Temperature: 48.71 °C
+Humidity: 44.19 %
+Pressure: 961.97 hPa
+Light Intensity: 954.80 lux
+---------------------------
+Temperature: 36.29 °C
+Humidity: 90.15 %
+Pressure: 1024.52 hPa
+Light Intensity: 91.22 lux
+---------------------------
+Temperature: 20.56 °C
+Humidity: 4.81 %
+Pressure: 1039.89 hPa
+Light Intensity: 906.31 lux
+---------------------------
+Temperature: 37.26 °C
+Humidity: 88.18 %
+Pressure: 985.65 hPa
+Light Intensity: 244.85 lux
+---------------------------
+Temperature: 38.49 °C
+Humidity: 61.24 %
+Pressure: 1040.69 hPa
+Light Intensity: 960.20 lux
+---------------------------
+Temperature: 24.09 °C
+Humidity: 66.20 %
+Pressure: 973.66 hPa
+Light Intensity: 615.83 lux
+---------------------------
+Temperature: 49.85 °C
+Humidity: 33.04 %
+Pressure: 983.68 hPa
+Light Intensity: 485.76 lux
+---------------------------
+Temperature: 32.45 °C
+Humidity: 35.82 %
+Pressure: 975.94 hPa
+Light Intensity: 92.26 lux
+---------------------------
+Temperature: 28.84 °C
+Humidity: 15.39 %
+Pressure: 1046.72 hPa
+Light Intensity: 483.08 lux
+---------------------------
+Temperature: 29.25 °C
+Humidity: 96.26 %
+Pressure: 957.26 hPa
+Light Intensity: 331.95 lux
+---------------------------
+Temperature: 29.46 °C
+Humidity: 92.37 %
+Pressure: 973.46 hPa
+Light Intensity: 736.75 lux
+---------------------------
+Temperature: 46.86 °C
+Humidity: 1.41 %
+Pressure: 1010.59 hPa
+Light Intensity: 290.29 lux
+---------------------------
+Temperature: 33.36 °C
+Humidity: 9.35 %
+Pressure: 959.57 hPa
+Light Intensity: 889.31 lux
+---------------------------
+Temperature: 40.63 °C
+Humidity: 51.70 %
+Pressure: 1007.23 hPa
+Light Intensity: 626.45 lux
+---------------------------
+Temperature: 42.52 °C
+Humidity: 17.85 %
+Pressure: 951.46 hPa
+Light Intensity: 83.10 lux
+---------------------------
+Temperature: 45.08 °C
+Humidity: 13.58 %
+Pressure: 1026.18 hPa
+Light Intensity: 205.51 lux
+---------------------------
+Temperature: 41.46 °C
+Humidity: 74.52 %
+Pressure: 973.33 hPa
+Light Intensity: 768.58 lux
+---------------------------
+Temperature: 29.62 °C
+Humidity: 96.45 %
+Pressure: 971.91 hPa
+Light Intensity: 126.22 lux
+---------------------------
+Temperature: 29.73 °C
+Humidity: 11.70 %
+Pressure: 1025.49 hPa
+Light Intensity: 94.24 lux
+---------------------------
+Temperature: 47.31 °C
+Humidity: 67.94 %
+Pressure: 955.95 hPa
+Light Intensity: 339.64 lux
+---------------------------
+Temperature: 29.93 °C
+Humidity: 9.40 %
+Pressure: 978.14 hPa
+Light Intensity: 295.97 lux
+---------------------------
+Temperature: 31.31 °C
+Humidity: 96.51 %
+Pressure: 1019.57 hPa
+Light Intensity: 301.92 lux
+---------------------------
+Temperature: 31.41 °C
+Humidity: 44.57 %
+Pressure: 1027.67 hPa
+Light Intensity: 4.30 lux
+---------------------------
+Temperature: 42.76 °C
+Humidity: 38.58 %
+Pressure: 1022.58 hPa
+Light Intensity: 866.30 lux
+---------------------------
+Temperature: 49.76 °C
+Humidity: 38.73 %
+Pressure: 964.37 hPa
+Light Intensity: 768.40 lux
+---------------------------
+Temperature: 32.48 °C
+Humidity: 89.11 %
+Pressure: 981.24 hPa
+Light Intensity: 700.00 lux
+---------------------------
+Temperature: 35.12 °C
+Humidity: 92.69 %
+Pressure: 994.53 hPa
+Light Intensity: 152.96 lux
+---------------------------
+Temperature: 46.23 °C
+Humidity: 78.08 %
+Pressure: 1004.14 hPa
+Light Intensity: 245.58 lux
+---------------------------
+Temperature: 31.79 °C
+Humidity: 1.54 %
+Pressure: 1041.86 hPa
+Light Intensity: 505.02 lux
+---------------------------
+Temperature: 36.10 °C
+Humidity: 53.24 %
+Pressure: 988.66 hPa
+Light Intensity: 460.31 lux
+---------------------------
+Temperature: 30.35 °C
+Humidity: 82.85 %
+Pressure: 960.19 hPa
+Light Intensity: 200.66 lux
+---------------------------
+Temperature: 31.20 °C
+Humidity: 26.98 %
+Pressure: 987.12 hPa
+Light Intensity: 91.74 lux
+---------------------------
+Temperature: 25.04 °C
+Humidity: 78.95 %
+Pressure: 968.24 hPa
+Light Intensity: 306.77 lux
+---------------------------
+Temperature: 33.06 °C
+Humidity: 51.01 %
+Pressure: 1021.12 hPa
+Light Intensity: 367.75 lux
+---------------------------
+Temperature: 35.45 °C
+Humidity: 53.43 %
+Pressure: 965.72 hPa
+Light Intensity: 554.31 lux
+---------------------------
+Temperature: 24.24 °C
+Humidity: 81.88 %
+Pressure: 1015.22 hPa
+Light Intensity: 510.39 lux
+---------------------------
+Temperature: 34.73 °C
+Humidity: 49.13 %
+Pressure: 983.71 hPa
+Light Intensity: 740.99 lux
+---------------------------
+Temperature: 42.96 °C
+Humidity: 30.41 %
+Pressure: 989.28 hPa
+Light Intensity: 889.77 lux
+---------------------------
+Temperature: 33.23 °C
+Humidity: 55.10 %
+Pressure: 1019.56 hPa
+Light Intensity: 757.23 lux
+---------------------------
+Temperature: 44.83 °C
+Humidity: 12.52 %
+Pressure: 988.14 hPa
+Light Intensity: 640.95 lux
+---------------------------
+Temperature: 45.66 °C
+Humidity: 49.95 %
+Pressure: 990.39 hPa
+Light Intensity: 584.34 lux
+---------------------------
+Temperature: 39.52 °C
+Humidity: 26.37 %
+Pressure: 1008.59 hPa
+Light Intensity: 842.40 lux
+---------------------------
+Temperature: 43.35 °C
+Humidity: 23.02 %
+Pressure: 996.56 hPa
+Light Intensity: 375.13 lux
+---------------------------
+Temperature: 24.05 °C
+Humidity: 88.36 %
+Pressure: 1007.24 hPa
+Light Intensity: 145.91 lux
+---------------------------
+Temperature: 40.30 °C
+Humidity: 31.66 %
+Pressure: 974.30 hPa
+Light Intensity: 796.84 lux
+---------------------------
+Temperature: 20.54 °C
+Humidity: 55.94 %
+Pressure: 976.10 hPa
+Light Intensity: 857.45 lux
+---------------------------
+Temperature: 32.99 °C
+Humidity: 70.68 %
+Pressure: 959.81 hPa
+Light Intensity: 142.67 lux
+---------------------------
+Temperature: 28.50 °C
+Humidity: 75.10 %
+Pressure: 954.21 hPa
+Light Intensity: 496.81 lux
+---------------------------
+Temperature: 32.41 °C
+Humidity: 52.53 %
+Pressure: 1048.98 hPa
+Light Intensity: 539.02 lux
+---------------------------
+Temperature: 36.18 °C
+Humidity: 66.62 %
+Pressure: 968.70 hPa
+Light Intensity: 567.46 lux
+---------------------------
+Temperature: 24.78 °C
+Humidity: 99.80 %
+Pressure: 1019.75 hPa
+Light Intensity: 277.47 lux
+---------------------------
+Temperature: 20.76 °C
+Humidity: 24.92 %
+Pressure: 1038.20 hPa
+Light Intensity: 450.85 lux
+---------------------------
+Temperature: 41.03 °C
+Humidity: 50.33 %
+Pressure: 1016.77 hPa
+Light Intensity: 271.74 lux
+---------------------------
+Temperature: 34.07 °C
+Humidity: 39.53 %
+Pressure: 984.35 hPa
+Light Intensity: 376.35 lux
+---------------------------
+Temperature: 48.95 °C
+Humidity: 67.88 %
+Pressure: 1047.70 hPa
+Light Intensity: 627.64 lux
+---------------------------
+Temperature: 48.37 °C
+Humidity: 96.47 %
+Pressure: 964.00 hPa
+Light Intensity: 960.72 lux
+---------------------------
+Temperature: 44.76 °C
+Humidity: 65.08 %
+Pressure: 971.62 hPa
+Light Intensity: 995.06 lux
+---------------------------
+Temperature: 48.08 °C
+Humidity: 67.24 %
+Pressure: 960.90 hPa
+Light Intensity: 391.61 lux
+---------------------------

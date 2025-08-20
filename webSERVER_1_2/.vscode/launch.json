@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Keil Debug",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}\\path_to_output_file.axf",  // Replace with path to your output binary
+        "args": [],
+        "stopAtEntry": true,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "miDebuggerPath": "path_to_your_gdb_executable",  // Replace with path to GDB (optional)
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ],
+        "preLaunchTask": "Build Keil Project",
+        "internalConsoleOptions": "openOnSessionStart"
+      }
+    ]
+  }
+  

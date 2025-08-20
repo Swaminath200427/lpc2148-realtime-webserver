@@ -1,0 +1,6 @@
+Information on LPC2148 :-
+{A} Overview :
+1) Package name :- LQFP-64 : Low-profile Quad Flat Package. It has a total of 64 pins which are SMD with 16 pins on each side starting from top left corner in anti-clockwise direction. 
+2) It is a 32 bit ARM7 microcontroller with 512 KB ROM (where code   is stored) and 40 KB RAM (storing and retrieving data). MAX speed is upto 60MHz operation. 
+3) 45 GPIO (General Purpose Input-Output) pins, 2 Timers (32 bits) supporting extra features like Capture, Compare and PWM.
+4) 22 interrupts. 2(AD0,AD1) with 8+6(respectively)=14 channels. 2 SPI,UART and I2C ports each and 1 USB,DAC port each.
